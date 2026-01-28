@@ -12,6 +12,7 @@
     "prisma:seed": "pnpm run prisma/seed.ts"
   },
   "dependencies": {
+    "@prisma/adapter-mariadb": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
