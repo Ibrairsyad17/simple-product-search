@@ -19,7 +19,7 @@ export class AuthService {
   async register(data: RegisterRequest): Promise<AuthResponse> {
     const existingUser = await userRepository.findByEmail(data.email);
     if (existingUser) {
-      throw new Error('User Already Exists!');
+      throw new Error('User already exists');
     }
 
     const hashedPassword = await bcryptHash(data.password, 10);
@@ -36,7 +36,7 @@ export class AuthService {
 
     return {
       code: 201,
-      status: 'success',
+      message: 'User registered successfully',
       user: {
         id: user.id,
         email: user.email,

@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { config } from './src/config';
 import cookieParser from 'cookie-parser';
+import routes from './src/routes';
 
 dotenv.config();
 
@@ -35,6 +36,8 @@ app.get('/check-health', (_req, res) => {
     });
   }
 });
+
+app.use('/api', routes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

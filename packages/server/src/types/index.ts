@@ -11,7 +11,7 @@ export interface LoginRequest {
 
 export interface AuthResponse {
   code: number;
-  status: string;
+  message: string;
   user: {
     id: string;
     email: string;
