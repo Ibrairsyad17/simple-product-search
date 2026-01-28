@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { config } from '../config';
 import { userRepository } from '../repositories';
-import type { RegisterRequest, AuthResponse } from '../types';
+import type { RegisterRequest, AuthResponse, LoginRequest } from '../types';
 import { prisma } from '../config/database';
 
 // @ts-ignore - CommonJS module
@@ -37,6 +37,34 @@ export class AuthService {
     return {
       code: 201,
       message: 'User registered successfully',
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
+      token,
+      refreshToken,
+    };
+  }
+
+  async login(data: LoginRequest): Promise<AuthResponse> {
+    // Find user
+    const user = await userRepository.findByEmail(data.email);
+    if (!user || !user.password) {
+      throw new Error('Invalid credentials');
+    }
+
+    const isValidPassword = await bcryptCompare(data.password, user.password);
+    if (!isValidPassword) {
+      throw new Error('Invalid credentials');
+    }
+
+    const token = this.generateToken(user.id);
+    const refreshToken = await this.generateRefreshToken(user.id);
+
+    return {
+      code: 200,
+      message: 'Login successful',
       user: {
         id: user.id,
         email: user.email,
