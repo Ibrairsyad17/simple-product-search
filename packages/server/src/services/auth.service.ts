@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import { config } from '../config';
 import { userRepository } from '../repositories';
 import type { RegisterRequest, AuthResponse } from '../types';
+import { prisma } from '../config/database';
 
 // @ts-ignore - CommonJS module
 const bcryptHash = bcrypt.hash || bcrypt.default?.hash;
@@ -59,7 +60,13 @@ export class AuthService {
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
 
-    await userRepository.createRefreshToken(userId, token, expiresAt);
+    await prisma.refreshToken.create({
+      data: {
+        userId,
+        token,
+        expiresAt,
+      },
+    });
 
     return token;
   }

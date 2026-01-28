@@ -1,15 +1,29 @@
-import { prisma } from '../config/database.ts';
+import { User } from '../config/database.ts';
 
-export class UserRepository {
-  async findByEmail(email: string) {
-    return prisma.user.findUnique({
-      where: { email },
+export interface IUserRepository {
+  findById(id: string): Promise<User | null>;
+  findByEmail(email: string): Promise<User | null>;
+  create(data: {
+    email: string;
+    password?: string;
+    name?: string;
+    provider?: string;
+    googleId?: string;
+  }): Promise<User>;
+}
+
+export class UserRepository implements IUserRepository {
+  constructor(private prisma: any) {}
+
+  async findById(id: string): Promise<User | null> {
+    return this.prisma.user.findUnique({
+      where: { id },
     });
   }
 
-  async findById(id: string) {
-    return prisma.user.findUnique({
-      where: { id },
+  async findByEmail(email: string): Promise<User | null> {
+    return this.prisma.user.findUnique({
+      where: { email },
     });
   }
 
@@ -19,21 +33,9 @@ export class UserRepository {
     name?: string;
     provider?: string;
     googleId?: string;
-  }) {
-    return prisma.user.create({
+  }): Promise<User> {
+    return this.prisma.user.create({
       data,
     });
   }
-
-  async createRefreshToken(userId: string, token: string, expiresAt: Date) {
-    return prisma.refreshToken.create({
-      data: {
-        userId,
-        token,
-        expiresAt,
-      },
-    });
-  }
 }
-
-export const userRepository = new UserRepository();
