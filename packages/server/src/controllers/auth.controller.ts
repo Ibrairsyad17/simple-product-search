@@ -72,6 +72,10 @@ export class AuthController {
       });
     }
   }
+
+  async me(req: Request, res: Response) {
+    res.json({ user: req.user });
+  }
 }
 
 export const authController = new AuthController();

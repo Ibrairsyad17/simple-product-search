@@ -98,6 +98,15 @@ export class AuthService {
 
     return token;
   }
+
+  verifyToken(token: string): { userId: string } {
+    try {
+      const decoded = jwtVerify(token, config.jwt.secret);
+      return decoded as { userId: string };
+    } catch (error) {
+      throw new Error('Invalid token');
+    }
+  }
 }
 
 export const authService = new AuthService();
