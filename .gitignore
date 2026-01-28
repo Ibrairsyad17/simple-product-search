@@ -1,6 +1,12 @@
 # dependencies (bun install)
 node_modules
 
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+.buninstall
+bun.lockb
+
 # output
 out
 dist
