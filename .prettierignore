@@ -1,0 +1,11 @@
+node_modules
+bun.lockb
+dist
+.env
+bun.lock
+
+# Ignore all log files
+*.log
+# Ignore build output directories
+build
+out

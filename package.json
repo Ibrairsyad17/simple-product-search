@@ -1,0 +1,21 @@
+{
+  "name": "simple-product-search",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "concurrently": "^9.2.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
+    "tsx": "^4.21.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "private": true,
+  "scripts": {
+    "dev": "node --import tsx index.ts",
+    "format": "prettier --write .",
+    "prepare": "husky"
+  },
+  "type": "module"
+}

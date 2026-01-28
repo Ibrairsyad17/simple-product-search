@@ -1,0 +1,9 @@
+{
+  "name": "@simple-product-search/server",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "echo 'Server dev script here'"
+  }
+}
