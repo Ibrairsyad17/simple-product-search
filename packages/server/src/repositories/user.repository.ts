@@ -13,12 +13,12 @@ export class UserRepository {
     });
   }
 
-  async createUser(data: {
+  async create(data: {
     email: string;
     password?: string;
     name?: string;
-    provider: string;
-    googleId: string;
+    provider?: string;
+    googleId?: string;
   }) {
     return prisma.user.create({
       data,
