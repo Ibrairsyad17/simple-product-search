@@ -1,4 +1,4 @@
-import { User } from '../config/database.ts';
+import { prisma, User } from '../config/database.ts';
 
 export interface IUserRepository {
   findById(id: string): Promise<User | null>;
@@ -35,6 +35,13 @@ export class UserRepository implements IUserRepository {
     googleId?: string;
   }): Promise<User> {
     return this.prisma.user.create({
+      data,
+    });
+  }
+
+  async update(id: string, data: Partial<User>): Promise<User> {
+    return this.prisma.user.update({
+      where: { id },
       data,
     });
   }
