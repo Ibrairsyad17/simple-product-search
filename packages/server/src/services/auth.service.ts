@@ -99,6 +99,12 @@ export class AuthService {
     return token;
   }
 
+  async revokeRefreshToken(refreshToken: string): Promise<void> {
+    await prisma.refreshToken.deleteMany({
+      where: { token: refreshToken },
+    });
+  }
+
   verifyToken(token: string): { userId: string } {
     try {
       const decoded = jwtVerify(token, config.jwt.secret);

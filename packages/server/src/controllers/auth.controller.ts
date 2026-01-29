@@ -73,6 +73,24 @@ export class AuthController {
     }
   }
 
+  async logout(req: Request, res: Response) {
+    try {
+      const refreshToken = req.cookies.refreshToken;
+      if (refreshToken) {
+        await authService.revokeRefreshToken(refreshToken);
+      }
+
+      res.clearCookie('token');
+      res.clearCookie('refreshToken');
+      res.status(204).send();
+    } catch (error: any) {
+      res.status(500).json({
+        code: 500,
+        message: error.message || 'Logout failed',
+      });
+    }
+  }
+
   async me(req: Request, res: Response) {
     res.json({ user: req.user });
   }
