@@ -5,6 +5,7 @@ import { config } from '../config';
 import { userRepository } from '../repositories';
 import type { RegisterRequest, AuthResponse, LoginRequest } from '../types';
 import { prisma } from '../config/database';
+import { OAuth2Client } from 'google-auth-library';
 
 // @ts-ignore - CommonJS module
 const bcryptHash = bcrypt.hash || bcrypt.default?.hash;
@@ -14,6 +15,8 @@ const bcryptCompare = bcrypt.compare || bcrypt.default?.compare;
 const jwtSign = jwt.sign || jwt.default?.sign;
 // @ts-ignore - CommonJS module
 const jwtVerify = jwt.verify || jwt.default?.verify;
+
+const googleClient = new OAuth2Client(config.google.clientId);
 
 export class AuthService {
   async register(data: RegisterRequest): Promise<AuthResponse> {
@@ -75,6 +78,53 @@ export class AuthService {
     };
   }
 
+  async googleAuth(token: string): Promise<AuthResponse> {
+    try {
+      const ticket = await googleClient.verifyIdToken({
+        idToken: token,
+        audience: config.google.clientId,
+      });
+
+      const payload = ticket.getPayload();
+      if (!payload || !payload.email) {
+        throw new Error('Invalid Google token');
+      }
+
+      let user = await userRepository.findByGoogleId(payload.sub);
+
+      if (!user) {
+        const existingUser = await userRepository.findByEmail(payload.email);
+        if (existingUser) {
+          throw new Error('Email already exists with different provider');
+        }
+
+        user = await userRepository.create({
+          email: payload.email,
+          name: payload.name,
+          provider: 'google',
+          googleId: payload.sub,
+        });
+      }
+
+      const jwtToken = this.generateToken(user.id);
+      const refreshToken = await this.generateRefreshToken(user.id);
+
+      return {
+        code: 200,
+        message: 'Google authentication successful',
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        },
+        token: jwtToken,
+        refreshToken,
+      };
+    } catch (error) {
+      throw new Error('Google authentication failed');
+    }
+  }
+
   generateToken(userId: string): string {
     const token = jwtSign({ userId }, config.jwt.secret, {
       expiresIn: config.jwt.expiresIn,
@@ -97,6 +147,43 @@ export class AuthService {
     });
 
     return token;
+  }
+
+  async refreshAccessToken(refreshToken: string): Promise<AuthResponse> {
+    const storedToken = await prisma.refreshToken.findUnique({
+      where: { token: refreshToken },
+      include: { user: true },
+    });
+
+    if (!storedToken) {
+      throw new Error('Invalid refresh token');
+    }
+
+    if (storedToken.expiresAt < new Date()) {
+      await prisma.refreshToken.delete({
+        where: { id: storedToken.id },
+      });
+      throw new Error('Refresh token expired');
+    }
+
+    const newAccessToken = this.generateToken(storedToken.userId);
+
+    await prisma.refreshToken.delete({
+      where: { id: storedToken.id },
+    });
+    const newRefreshToken = await this.generateRefreshToken(storedToken.userId);
+
+    return {
+      code: 200,
+      message: 'Token refreshed successfully',
+      user: {
+        id: storedToken.user.id,
+        email: storedToken.user.email,
+        name: storedToken.user.name,
+      },
+      token: newAccessToken,
+      refreshToken: newRefreshToken,
+    };
   }
 
   async revokeRefreshToken(refreshToken: string): Promise<void> {
