@@ -129,6 +129,42 @@ export class AuthController {
     }
   }
 
+  async refresh(req: Request, res: Response) {
+    try {
+      const refreshToken = req.body.refreshToken || req.cookies.refreshToken;
+
+      if (!refreshToken) {
+        return res.status(401).json({
+          code: 401,
+          message: 'Unauthorized: No refresh token provided',
+        });
+      }
+
+      const result = await authService.refreshAccessToken(refreshToken);
+
+      res.cookie('token', result.token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 15 * 60 * 1000,
+      });
+
+      res.cookie('refreshToken', result.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      res.json(result);
+    } catch (error: any) {
+      res.status(401).json({
+        code: 401,
+        message: error.message || 'Token refresh failed',
+      });
+    }
+  }
+
   async me(req: Request, res: Response) {
     res.json({ user: req.user });
   }
