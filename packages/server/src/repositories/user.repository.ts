@@ -27,6 +27,12 @@ export class UserRepository implements IUserRepository {
     });
   }
 
+  async findByGoogleId(googleId: string): Promise<User | null> {
+    return this.prisma.user.findUnique({
+      where: { googleId },
+    });
+  }
+
   async create(data: {
     email: string;
     password?: string;
