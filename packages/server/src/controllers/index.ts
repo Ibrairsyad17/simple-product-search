@@ -1,1 +1,2 @@
-export { authController } from './auth.controller.js';
+export { authController } from './auth.controller';
+export { categoryController } from './category.controller';
