@@ -1,4 +1,4 @@
-import { authService } from '../services/auth.service';
+import { authService } from '../services';
 import { loginSchema, registerSchema } from '../utils/validation';
 import type { Request, Response } from 'express';
 

@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import { userRepository } from '../repositories/index.js';
-import { authService } from '../services/auth.service';
+import { authService } from '../services';
 
 declare global {
   namespace Express {

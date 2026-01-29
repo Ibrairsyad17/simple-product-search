@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 import type { Category } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { randomUUID } from 'crypto';
 
 const prisma = new PrismaClient({
   log: ['error'],
@@ -174,7 +175,10 @@ async function main() {
   const createdCategories = await Promise.all(
     categories.map((name) =>
       prisma.category.create({
-        data: { name },
+        data: {
+          id: randomUUID(),
+          name,
+        },
       })
     )
   );
