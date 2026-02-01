@@ -3,16 +3,7 @@ import LoginForm from './components/auth/LoginForm';
 import RegistrationForm from './components/auth/RegistrationForm';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import PublicRoute from './components/auth/PublicRoute';
-
-// eslint-disable-next-line react-refresh/only-export-components
-const HomePage = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="text-center">
-      <h1 className="text-4xl font-bold">Product Search</h1>
-      <p className="text-muted-foreground mt-2">Home page</p>
-    </div>
-  </div>
-);
+import { ProductSearchPage } from './components/product/ProductSearchPage';
 
 export const router = createBrowserRouter([
   {
@@ -35,7 +26,7 @@ export const router = createBrowserRouter([
     path: '/',
     element: (
       <ProtectedRoute>
-        <HomePage />
+        <ProductSearchPage />
       </ProtectedRoute>
     ),
   },
