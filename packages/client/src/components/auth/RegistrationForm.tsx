@@ -1,62 +1,34 @@
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
   setEmail,
   setPassword,
   setName,
   setTouched,
-  validateAllFields,
-  resetForm,
 } from '../../redux/slices/registerForm.slice';
-import { useRegister } from '../../hooks/auth/useRegister';
-import { useGoogleLogin as useGoogleLoginHook } from '../../hooks/auth/useGoogleLogin';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
 import { GoogleLogin } from '@react-oauth/google';
 import { Link } from 'react-router-dom';
+import { useRegisterForm } from '../../hooks/auth/useRegisterForm';
 
 export default function RegistrationForm() {
-  const dispatch = useAppDispatch();
-  const { email, password, name, errors, isValid, touched } = useAppSelector(
-    (state) => state.registerForm
-  );
-  const registerMutation = useRegister();
-  const googleLoginMutation = useGoogleLoginHook();
-
-  // Reset form on mount
-  useEffect(() => {
-    dispatch(resetForm());
-  }, [dispatch]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(validateAllFields());
-
-    if (isValid) {
-      registerMutation.mutate({ email, password, name: name || undefined });
-    }
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleGoogleSuccess = (credentialResponse: any) => {
-    if (credentialResponse.credential) {
-      googleLoginMutation.mutate({ token: credentialResponse.credential });
-    }
-  };
-
-  const handleGoogleError = () => {
-    console.error('Google login failed');
-  };
-
-  const getFieldError = (field: 'email' | 'password' | 'name') => {
-    const error = errors.find((err) => err.field === field);
-    return error && touched[field] ? error.message : null;
-  };
+  const {
+    email,
+    password,
+    name,
+    isValid,
+    touched,
+    handleSubmit,
+    handleGoogleSuccess,
+    handleGoogleError,
+    getFieldError,
+    registerMutation,
+    dispatch,
+  } = useRegisterForm();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md space-y-6">
+      <div className="w-full max-w-xs space-y-6 border p-6 rounded-lg shadow-xs bg-white">
         <div className="text-center space-y-2">
           <h1 className="text-2xl font-bold">Create an account</h1>
           <p className="text-sm text-muted-foreground">

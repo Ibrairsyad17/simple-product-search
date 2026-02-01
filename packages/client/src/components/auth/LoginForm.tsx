@@ -26,9 +26,9 @@ export default function LoginForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md space-y-6">
+      <div className="w-full max-w-xs space-y-6 border p-6 rounded-lg shadow-xs bg-white">
         <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold">Login to your account</h1>
+          <h1 className="text-2xl font-bold">Login</h1>
           <p className="text-sm text-muted-foreground">
             Enter your email below to login to your account
           </p>
