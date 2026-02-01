@@ -8,7 +8,12 @@ export class ProductService {
   ): Promise<PaginatedResponse<Product>> {
     const response = await httpClient.get<PaginatedResponse<Product>>(
       '/products',
-      { params }
+      {
+        params,
+        paramsSerializer: {
+          indexes: null, // This makes arrays serialize as ?category=id1&category=id2
+        },
+      }
     );
     return response.data;
   }
