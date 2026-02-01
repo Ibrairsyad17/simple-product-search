@@ -1,6 +1,6 @@
 import httpClient from './httpClient';
 import type { Product, SearchProductsParams } from '../types/product';
-import type { APIResponse, PaginatedResponse } from '../types/api';
+import type { PaginatedResponse } from '../types/api';
 
 export class ProductService {
   async searchProducts(

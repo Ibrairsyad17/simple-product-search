@@ -7,6 +7,7 @@ import { ProductGrid } from './ProductGrid';
 import { ProductGridSkeleton } from './ProductGridSkeleton';
 import { EmptyState } from './EmptyState';
 import { PaginationControls } from './PaginationControls';
+import { Header } from '../layout/Header';
 import { Menu } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useState } from 'react';
@@ -35,84 +36,87 @@ export function ProductSearchPage() {
   const emptyStateType = getEmptyStateType();
 
   return (
-    <div className="mx-auto min-h-screen max-w-7xl p-4">
-      <div className="mb-6">
-        <h1 className="mb-4 text-3xl font-bold">Search Products</h1>
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="flex-1">
-            <SearchInput />
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="md:hidden"
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              <Menu className="mr-2 size-4" />
-              Filters
-            </Button>
-            <SortDropdown />
+    <>
+      <Header />
+      <div className="mx-auto min-h-screen max-w-7xl p-4">
+        <div className="mb-6">
+          <h1 className="mb-4 text-3xl font-bold">Search Products</h1>
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex-1">
+              <SearchInput />
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="md:hidden"
+                onClick={() => setShowFilters(!showFilters)}
+              >
+                <Menu className="mr-2 size-4" />
+                Filters
+              </Button>
+              <SortDropdown />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex gap-6">
-        {/* Sidebar Filters - Desktop */}
-        <aside className="hidden w-64 shrink-0 md:block">
-          <div className="sticky top-4 rounded-lg border bg-card p-4">
-            <FilterPanel />
-          </div>
-        </aside>
-
-        {/* Mobile Filters */}
-        {showFilters && (
-          <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm md:hidden">
-            <div className="fixed inset-y-0 left-0 w-80 border-r bg-card p-6 shadow-lg">
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-lg font-semibold">Filters</h2>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowFilters(false)}
-                >
-                  Close
-                </Button>
-              </div>
+        <div className="flex gap-6">
+          {/* Sidebar Filters - Desktop */}
+          <aside className="hidden w-64 shrink-0 md:block">
+            <div className="sticky top-4 rounded-lg border bg-card p-4">
               <FilterPanel />
             </div>
-          </div>
-        )}
+          </aside>
 
-        {/* Main Content */}
-        <main className="min-w-0 flex-1">
-          {error && (
-            <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-destructive">
-              <p className="font-semibold">Error loading products</p>
-              <p className="text-sm">
-                {error instanceof Error ? error.message : 'Unknown error'}
-              </p>
+          {/* Mobile Filters */}
+          {showFilters && (
+            <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm md:hidden">
+              <div className="fixed inset-y-0 left-0 w-80 border-r bg-card p-6 shadow-lg">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-lg font-semibold">Filters</h2>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowFilters(false)}
+                  >
+                    Close
+                  </Button>
+                </div>
+                <FilterPanel />
+              </div>
             </div>
           )}
 
-          {isLoading && <ProductGridSkeleton />}
+          {/* Main Content */}
+          <main className="min-w-0 flex-1">
+            {error && (
+              <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-destructive">
+                <p className="font-semibold">Error loading products</p>
+                <p className="text-sm">
+                  {error instanceof Error ? error.message : 'Unknown error'}
+                </p>
+              </div>
+            )}
 
-          {!isLoading && !error && emptyStateType && (
-            <EmptyState type={emptyStateType} />
-          )}
+            {isLoading && <ProductGridSkeleton />}
 
-          {!isLoading && !error && data && data.data.length > 0 && (
-            <div className="space-y-6">
-              <ProductGrid products={data.data} />
-              <PaginationControls
-                currentPage={data.pagination.page}
-                totalPages={data.pagination.totalPages}
-                total={data.pagination.total}
-              />
-            </div>
-          )}
-        </main>
+            {!isLoading && !error && emptyStateType && (
+              <EmptyState type={emptyStateType} />
+            )}
+
+            {!isLoading && !error && data && data.data.length > 0 && (
+              <div className="space-y-6">
+                <ProductGrid products={data.data} />
+                <PaginationControls
+                  currentPage={data.pagination.page}
+                  totalPages={data.pagination.totalPages}
+                  total={data.pagination.total}
+                />
+              </div>
+            )}
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
