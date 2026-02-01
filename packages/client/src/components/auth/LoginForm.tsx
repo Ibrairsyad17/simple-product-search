@@ -1,62 +1,34 @@
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
   setEmail,
   setPassword,
   setTouched,
-  validateAllFields,
-  resetForm,
 } from '../../redux/slices/loginForm.slice';
-import { useLogin } from '../../hooks/auth/useLogin';
-import { useGoogleLogin as useGoogleLoginHook } from '../../hooks/auth/useGoogleLogin';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
 import { GoogleLogin } from '@react-oauth/google';
 import { Link } from 'react-router-dom';
+import { useLoginForm } from '../../hooks/auth/useLoginForm';
 
 export default function LoginForm() {
-  const dispatch = useAppDispatch();
-  const { email, password, errors, isValid, touched } = useAppSelector(
-    (state) => state.loginForm
-  );
-  const loginMutation = useLogin();
-  const googleLoginMutation = useGoogleLoginHook();
-
-  useEffect(() => {
-    dispatch(resetForm());
-  }, [dispatch]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(validateAllFields());
-
-    if (isValid) {
-      loginMutation.mutate({ email, password });
-    }
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleGoogleSuccess = (credentialResponse: any) => {
-    if (credentialResponse.credential) {
-      googleLoginMutation.mutate({ token: credentialResponse.credential });
-    }
-  };
-
-  const handleGoogleError = () => {
-    console.error('Google login failed');
-  };
-
-  const getFieldError = (field: 'email' | 'password') => {
-    const error = errors.find((err) => err.field === field);
-    return error && touched[field] ? error.message : null;
-  };
+  const {
+    email,
+    password,
+    isValid,
+    touched,
+    handleSubmit,
+    handleGoogleSuccess,
+    handleGoogleError,
+    getFieldError,
+    loginMutation,
+    dispatch,
+  } = useLoginForm();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md space-y-6">
+      <div className="w-full max-w-xs space-y-6 border p-6 rounded-lg shadow-xs bg-white">
         <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold">Login to your account</h1>
+          <h1 className="text-2xl font-bold">Login</h1>
           <p className="text-sm text-muted-foreground">
             Enter your email below to login to your account
           </p>
