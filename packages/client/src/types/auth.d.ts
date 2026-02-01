@@ -20,6 +20,8 @@ export interface GoogleAuthRequest {
 }
 
 export interface AuthResponse {
+  code: number;
+  message: string;
   user: User;
   token: string;
   refreshToken: string;

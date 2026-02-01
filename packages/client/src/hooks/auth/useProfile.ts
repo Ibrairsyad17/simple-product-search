@@ -12,7 +12,7 @@ export const useProfile = () => {
 
   return useQuery({
     queryKey: ['profile'],
-    queryFn: () => authService.getProfile().then((res) => res.data?.user),
+    queryFn: () => authService.getProfile().then((res) => res.user),
     enabled,
     retry: false,
     staleTime: 1000 * 60 * 5,
