@@ -25,7 +25,7 @@ export function SortDropdown() {
 
   return (
     <Select value={sortValue} onValueChange={updateSort}>
-      <SelectTrigger className="w-[200px]">
+      <SelectTrigger className="w-50">
         <SelectValue placeholder="Sort by" />
       </SelectTrigger>
       <SelectContent>

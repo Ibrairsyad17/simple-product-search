@@ -1,6 +1,6 @@
-import { useSearchParams } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { usePagination } from '../../hooks/miscellaneous/usePagination';
 
 interface PaginationControlsProps {
   currentPage: number;
@@ -13,48 +13,7 @@ export function PaginationControls({
   totalPages,
   total,
 }: PaginationControlsProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const goToPage = (page: number) => {
-    const newParams = new URLSearchParams(searchParams);
-    newParams.set('page', String(page));
-    setSearchParams(newParams, { replace: true });
-  };
-
-  const getPageNumbers = () => {
-    const pages: (number | string)[] = [];
-    const showPages = 5;
-
-    if (totalPages <= showPages + 2) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      if (currentPage <= 3) {
-        for (let i = 1; i <= showPages; i++) {
-          pages.push(i);
-        }
-        pages.push('...');
-        pages.push(totalPages);
-      } else if (currentPage >= totalPages - 2) {
-        pages.push(1);
-        pages.push('...');
-        for (let i = totalPages - showPages + 1; i <= totalPages; i++) {
-          pages.push(i);
-        }
-      } else {
-        pages.push(1);
-        pages.push('...');
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-          pages.push(i);
-        }
-        pages.push('...');
-        pages.push(totalPages);
-      }
-    }
-
-    return pages;
-  };
+  const { goToPage, getPageNumbers } = usePagination(currentPage, totalPages);
 
   if (totalPages <= 1) return null;
 

@@ -3,10 +3,6 @@ import { useSearchParams } from 'react-router-dom';
 import { productService } from '../../services/productService';
 import type { SearchProductsParams } from '../../types/product';
 
-/**
- * Hook to search products with URL-synced filters
- * Automatically syncs with URL query parameters
- */
 export function useSearchProducts() {
   const [searchParams] = useSearchParams();
 

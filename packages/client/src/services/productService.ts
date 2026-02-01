@@ -11,7 +11,7 @@ export class ProductService {
       {
         params,
         paramsSerializer: {
-          indexes: null, // This makes arrays serialize as ?category=id1&category=id2
+          indexes: null,
         },
       }
     );
