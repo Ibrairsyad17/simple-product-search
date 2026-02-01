@@ -4,6 +4,7 @@ import RegistrationForm from './components/auth/RegistrationForm';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import PublicRoute from './components/auth/PublicRoute';
 import { ProductSearchPage } from './components/product/ProductSearchPage';
+import { ProductDetailPage } from './components/product/ProductDetailPage';
 
 export const router = createBrowserRouter([
   {
@@ -30,5 +31,12 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-  // Product detail route will be added in step 6
+  {
+    path: '/products/:id',
+    element: (
+      <ProtectedRoute>
+        <ProductDetailPage />
+      </ProtectedRoute>
+    ),
+  },
 ]);

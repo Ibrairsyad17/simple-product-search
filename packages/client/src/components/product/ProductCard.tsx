@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import type { Product } from '../../types/product';
 import { formatPrice } from '../../utils/formatters';
 import { Star, Package } from 'lucide-react';
@@ -8,11 +8,13 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const location = useLocation();
   const imageUrl = product.images[0]?.url || '/placeholder-product.png';
 
   return (
     <Link
       to={`/products/${product.id}`}
+      state={{ from: `${location.pathname}${location.search}` }}
       className="group block overflow-hidden rounded-lg border bg-card transition-shadow hover:shadow-lg"
     >
       <div className="aspect-square overflow-hidden bg-muted">

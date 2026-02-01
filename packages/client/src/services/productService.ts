@@ -14,10 +14,8 @@ export class ProductService {
   }
 
   async getProduct(id: string): Promise<Product> {
-    const response = await httpClient.get<APIResponse<Product>>(
-      `/products/${id}`
-    );
-    return response.data.data!;
+    const response = await httpClient.get<Product>(`/products/${id}`);
+    return response.data;
   }
 }
 
