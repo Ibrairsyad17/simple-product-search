@@ -12,6 +12,9 @@ out
 dist
 *.tgz
 
+instruction.md 
+sims-ppob-ibrahim-main
+
 # code coverage
 coverage
 *.lcov
