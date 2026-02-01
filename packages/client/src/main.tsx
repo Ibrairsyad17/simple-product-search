@@ -3,10 +3,10 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Toaster } from 'sonner';
-import ReactQueryProvider from '@/components/providers/ReactQueryProvider';
-import ReduxProvider from '@/components/providers/ReduxProvider';
-import { router } from '@/route';
-import { GOOGLE_CLIENT_ID } from '@/constants/baseUrl';
+import ReactQueryProvider from './components/providers/ReactQueryProvider';
+import ReduxProvider from './components/providers/ReduxProvider';
+import { router } from './route';
+import { GOOGLE_CLIENT_ID } from './constants/baseUrl';
 import './index.css';
 
 createRoot(document.getElementById('root')!).render(
