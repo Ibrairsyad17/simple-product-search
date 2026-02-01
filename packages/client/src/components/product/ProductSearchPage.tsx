@@ -40,7 +40,6 @@ export function ProductSearchPage() {
       <Header />
       <div className="mx-auto min-h-screen max-w-7xl p-4">
         <div className="mb-6">
-          <h1 className="mb-4 text-3xl font-bold">Search Products</h1>
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="flex-1">
               <SearchInput />
