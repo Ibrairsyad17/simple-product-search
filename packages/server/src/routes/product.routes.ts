@@ -10,9 +10,6 @@ const router = Router();
  *   get:
  *     summary: Search and filter products
  *     tags: [Products]
- *     security:
- *       - bearerAuth: []
- *       - cookieAuth: []
  *     parameters:
  *       - in: query
  *         name: q
@@ -79,16 +76,14 @@ const router = Router();
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/PaginatedProducts'
- *       401:
- *         description: Unauthorized - Invalid or missing token
+ *       400:
+ *         description: Bad request - Invalid query parameters
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/', authMiddleware, (req, res) =>
-  productController.search(req, res)
-);
+router.get('/', (req, res) => productController.search(req, res));
 
 /**
  * @swagger

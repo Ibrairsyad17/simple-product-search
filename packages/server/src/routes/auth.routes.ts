@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authController } from '../controllers/auth.controller';
-import { authMiddleware } from '../middlewares';
+import { authMiddleware, authLimiter, registerLimiter } from '../middlewares';
 
 const router = Router();
 
@@ -30,7 +30,9 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/register', (req, res) => authController.register(req, res));
+router.post('/register', registerLimiter, (req, res) =>
+  authController.register(req, res)
+);
 
 /**
  * @swagger
@@ -58,7 +60,9 @@ router.post('/register', (req, res) => authController.register(req, res));
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/login', (req, res) => authController.login(req, res));
+router.post('/login', authLimiter, (req, res) =>
+  authController.login(req, res)
+);
 
 /**
  * @swagger
@@ -92,7 +96,9 @@ router.post('/login', (req, res) => authController.login(req, res));
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/google', (req, res) => authController.googleAuth(req, res));
+router.post('/google', authLimiter, (req, res) =>
+  authController.googleAuth(req, res)
+);
 
 /**
  * @swagger
@@ -131,7 +137,9 @@ router.post('/google', (req, res) => authController.googleAuth(req, res));
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/refresh', (req, res) => authController.refresh(req, res));
+router.post('/refresh', authLimiter, (req, res) =>
+  authController.refresh(req, res)
+);
 
 /**
  * @swagger
