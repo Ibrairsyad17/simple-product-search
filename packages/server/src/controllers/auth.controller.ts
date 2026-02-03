@@ -26,7 +26,11 @@ export class AuthController {
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
-      res.status(201).json(result);
+      res.status(201).json({
+        code: 201,
+        message: 'Registration successful',
+        user: result.user,
+      });
     } catch (error: any) {
       if (error.name === 'ZodError') {
         return res.status(400).json({
@@ -96,7 +100,12 @@ export class AuthController {
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
-      res.json(result);
+      // Only return user info, tokens are in httpOnly cookies
+      res.json({
+        code: 200,
+        message: 'Google authentication successful',
+        user: result.user,
+      });
     } catch (error: any) {
       if (error.name === 'ZodError') {
         return res.status(400).json({
@@ -156,7 +165,11 @@ export class AuthController {
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
-      res.json(result);
+      // Only return success, tokens are in httpOnly cookies
+      res.json({
+        code: 200,
+        message: 'Token refreshed successfully',
+      });
     } catch (error: any) {
       res.status(401).json({
         code: 401,

@@ -11,21 +11,14 @@ export const useLogin = () => {
 
   return useMutation({
     mutationFn: (data: LoginRequest) => authService.login(data),
-    onSuccess: (response) => {
-      // Server returns token at top level of response object
-      const token = response.token;
-      if (token) {
-        localStorage.setItem('token', token);
+    onSuccess: () => {
+      toast.success('Login successful!');
 
-        toast.success('Login successful!');
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
 
-        queryClient.invalidateQueries({ queryKey: ['profile'] });
-
-        // Navigate after a brief delay
-        setTimeout(() => {
-          navigate('/', { replace: true });
-        }, 100);
-      }
+      setTimeout(() => {
+        navigate('/', { replace: true });
+      }, 100);
     },
     onError: (error) => {
       const message = getErrorMessage(error);

@@ -11,12 +11,12 @@ const axiosInstance: AxiosInstance = axios.create({
   withCredentials: true,
 });
 
+// Request interceptor - cookies are sent automatically with withCredentials: true
+// No need to manually add Authorization header for normal requests
+// Bearer token is still supported in the middleware for Swagger/API testing
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    // Cookies are automatically included with withCredentials: true
     return config;
   },
   (error) => {
@@ -30,8 +30,7 @@ axiosInstance.interceptors.response.use(
   },
   (error: AxiosError) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-
+      // Session expired - cookies are automatically cleared by server or expired
       toast.error('Session expired. Please login again.');
 
       if (window.location.pathname !== '/login') {
