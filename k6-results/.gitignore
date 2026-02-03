@@ -1,0 +1,7 @@
+# K6 test results
+*.json
+*.html
+*.log
+
+# Keep the directory structure
+!.gitkeep

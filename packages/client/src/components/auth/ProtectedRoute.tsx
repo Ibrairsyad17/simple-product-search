@@ -8,12 +8,6 @@ interface ProtectedRouteProps {
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { data: user, isLoading, error } = useProfile();
-  const token = localStorage.getItem('token');
-
-  // No token, redirect to login
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
 
   // Loading state - show loading skeleton
   if (isLoading) {
@@ -28,12 +22,9 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     );
   }
 
-  // Error or no user, clear token and redirect
   if (error || !user) {
-    localStorage.removeItem('token');
     return <Navigate to="/login" replace />;
   }
 
-  // User is authenticated, render children
   return <>{children}</>;
 }

@@ -8,9 +8,8 @@ interface PublicRouteProps {
 
 export default function PublicRoute({ children }: PublicRouteProps) {
   const { data: user, isLoading } = useProfile();
-  const token = localStorage.getItem('token');
 
-  if (isLoading && token) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="space-y-4 w-full max-w-md">
@@ -22,7 +21,7 @@ export default function PublicRoute({ children }: PublicRouteProps) {
   }
 
   // User is authenticated, redirect to home
-  if (user && token) {
+  if (user) {
     return <Navigate to="/" replace />;
   }
 

@@ -11,20 +11,14 @@ export const useRegister = () => {
 
   return useMutation({
     mutationFn: (data: RegisterRequest) => authService.register(data),
-    onSuccess: (response) => {
-      // Server returns token at top level of response object
-      const token = response.token;
-      if (token) {
-        localStorage.setItem('token', token);
+    onSuccess: () => {
+      toast.success('Registration successful! Welcome!');
 
-        toast.success('Registration successful! Welcome!');
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
 
-        queryClient.invalidateQueries({ queryKey: ['profile'] });
-
-        setTimeout(() => {
-          navigate('/', { replace: true });
-        }, 100);
-      }
+      setTimeout(() => {
+        navigate('/', { replace: true });
+      }, 100);
     },
     onError: (error) => {
       const message = getErrorMessage(error);
